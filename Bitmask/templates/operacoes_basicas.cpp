@@ -1,37 +1,44 @@
 #include <iostream>
-#include <bitset> // Necessário para imprimir em binário
+#include <bitset> 
 
 using namespace std;
 
 int main() {
-    // Definindo valores de exemplo para as operações bit a bit
-    int element = 46; // 00101110
-    int mask = 170; // 10101010
-    int shift = 3; // 00000011
+    // Valores base para testes
+    int elemento = 46; // 00101110
+    int mascara = 170; // 10101010
+    int desloc = 3; // O quanto vamos pular
 
-    // No C++, bitset<8> converte o número para uma string binária de 8 bits
-    cout << "Elemento: " << bitset<8>(element) << " (" << element << ")" << endl;
-    cout << "Mascara:  " << bitset<8>(mask) << " (" << mask << ")" << endl;
-    cout << "Shift:    " << bitset<8>(shift) << " (" << shift << ")" << endl;
+    cout << "--- OPERACOES BASICAS ---" << endl;
+    cout << "Elemento: " << bitset<8>(elemento) << " (" << elemento << ")" << endl;
+    cout << "Mascara: " << bitset<8>(mascara) << " (" << mascara << ")" << endl;
 
-    // OPERAÇÃO AND (&) - Resulta 1 apenas se AMBOS forem 1
-    cout << "AND: " << bitset<8>(element & mask) << endl;
+    // OPERACOES LOGICAS PADRAO
+    cout << "AND (&): " << bitset<8>(elemento & mascara) << " (Intersection)" << endl;
+    cout << "OR  (|): " << bitset<8>(elemento | mascara) << " (Union)" << endl;
+    cout << "XOR (^): " << bitset<8>(elemento ^ mascara) << " (Difference/Flip)" << endl;
+    cout << "NOT (~): " << bitset<8>(~elemento) << " (Invert)" << endl;
 
-    // OPERAÇÃO OR (|) - Resulta 1 se PELO MENOS UM for 1
-    cout << "OR:  " << bitset<8>(element | mask) << endl;
+    cout << "\n--- DESLOCAMENTOS (POTENCIAS DE 2) ---" << endl;
+    // SHIFT LEFT (<<) - Multiplica por 2^n
+    cout << "L-Shift: " << bitset<8>(elemento << desloc) << " (Valor: " << (elemento << desloc) << ")" << endl;
+    // SHIFT RIGHT (>>) - Divide por 2^n (inteira)
+    cout << "R-Shift: " << bitset<8>(elemento >> desloc) << " (Valor: " << (elemento >> desloc) << ")" << endl;
 
-    // OPERAÇÃO XOR (^) - Resulta 1 se forem DIFERENTES
-    cout << "XOR: " << bitset<8>(element ^ mask) << endl;
+    cout << "\n--- AS SACADAS DA MARATONA (BITMASK) ---" << endl;
+    
+    // 1. GERAR POTENCIA DE 2 (Usado no total_caminhos do Petr)
+    int n = 5;
+    cout << "Gerar 2^" << n << ": " << (1 << n) << " (Usando 1 << n)" << endl;
 
-    // OPERAÇÃO NOT (~) - Inverte todos os bits
-    // Cuidado: em inteiros com sinal, isso envolve o complemento de dois
-    cout << "NOT: " << bitset<8>(~element) << endl;
+    // 2. EXTRAIR UM BIT ESPECIFICO (O "leitor de interruptor" do Petr)
+    // Queremos saber se o bit na posicao 3 do 'elemento' e 0 ou 1
+    int posicao = 3;
+    int bit = (elemento >> posicao) & 1;
+    cout << "Bit na pos " << posicao << " do elemento: " << bit << endl;
 
-    // SHIFT LEFT (<<) - Desloca os bits para a esquerda (equivale a multiplicar por 2^shift)
-    cout << "L-Shift: " << bitset<8>(element << shift) << " (valor: " << (element << shift) << ")" << endl;
-
-    // SHIFT RIGHT (>>) - Desloca os bits para a direita (equivale a dividir por 2^shift)
-    cout << "R-Shift: " << bitset<8>(element >> shift) << " (valor: " << (element >> shift) << ")" << endl;
+    // 3. PROPRIEDADE XOR (A base do XOR Mixup)
+    cout << "Prova XOR: " << (elemento ^ elemento) << " (Sempre zero se iguais)" << endl;
 
     return 0;
 }
